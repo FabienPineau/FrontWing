@@ -1,5 +1,4 @@
 import React from "react";
-import { Toaster } from "sonner";
 import { CustomerProvider } from "../context/CustomerContext";
 import { OrderProvider } from "../context/OrderContext";
 import { FlashMessagesProvider } from "../context/FlashMessagesContext";
@@ -12,10 +11,7 @@ const AppProviders: React.FC<AppProvidersProps> = ({ children }) => {
   return (
     <CustomerProvider>
       <OrderProvider>
-        <FlashMessagesProvider>
-          {children}
-          <Toaster richColors position="top-center" />
-        </FlashMessagesProvider>
+        <FlashMessagesProvider>{children}</FlashMessagesProvider>
       </OrderProvider>
     </CustomerProvider>
   );

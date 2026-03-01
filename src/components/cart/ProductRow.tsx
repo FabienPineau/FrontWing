@@ -1,24 +1,14 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { TableCell, TableRow } from '@/components/ui/table';
-import { IconX } from '@tabler/icons-react';
-import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { OrderItem } from '../../types/Order';
-import type { Product } from '../../types/Product';
 import { formatPrice } from '../../utils/price';
-
-interface CartVariant {
-  product: string;
-  optionValues?: string[];
-  code?: string;
-}
+import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
+import { IconX } from '@tabler/icons-react';
 
 interface ProductRowProps {
   orderItem: OrderItem;
-  onRemove: (id: number) => void;
-  onUpdate: (id: number, quantity: number) => void;
+  onRemove: any;
+  onUpdate: any;
 }
 
 const ProductRow: React.FC<ProductRowProps> = ({
@@ -30,77 +20,60 @@ const ProductRow: React.FC<ProductRowProps> = ({
     orderItem.quantity?.toString() || '1'
   );
 
-  const fetchVariant = async (): Promise<CartVariant> => {
+  const fetchVariant = async (): Promise<any> => {
     const response = await fetch(
       `${import.meta.env.VITE_REACT_APP_API_URL}${orderItem.variant}`
     );
     if (!response.ok) {
-      throw new Error('Problem loading variant');
+      throw new Error('Problem z pobieraniem wariantu');
     }
 
     return await response.json();
   };
 
-  const { data: variant } = useQuery<CartVariant, Error>({
+  const { data: variant } = useQuery<any, Error>({
     queryKey: ['variant', orderItem.id],
     queryFn: fetchVariant,
   });
 
-  const fetchProduct = async (): Promise<Product> => {
+  const fetchProduct = async (): Promise<any> => {
     const response = await fetch(
-      `${import.meta.env.VITE_REACT_APP_API_URL}${variant!.product}`
+      `${import.meta.env.VITE_REACT_APP_API_URL}${variant.product}`
     );
     if (!response.ok) {
-      throw new Error('Problem loading product');
+      throw new Error('Problem z pobieraniem produktu');
     }
 
     return await response.json();
   };
 
-  const { data: product } = useQuery<Product, Error>({
+  const { data: product } = useQuery<any, Error>({
     queryKey: ['product', orderItem.id],
     queryFn: fetchProduct,
     enabled: !!variant?.product,
   });
 
-  const { data: optionLabels } = useQuery<string[], Error>({
-    queryKey: ['optionLabels', orderItem.id],
-    queryFn: async () => {
-      const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
-      const urls: string[] = variant!.optionValues ?? [];
-      const values = await Promise.all(
-        urls.map((url: string) => fetch(`${API_URL}${url}`).then(r => r.json()))
-      ) as { value: string; option: string }[];
-      const options = await Promise.all(
-        values.map((v) => fetch(`${API_URL}${v.option}`).then(r => r.json()))
-      ) as { name: string }[];
-      return values.map((v, i) => `${options[i].name}: ${v.value}`);
-    },
-    enabled: !!variant?.optionValues?.length,
-  });
-
   return (
-    <TableRow>
-      <TableCell className="py-3">
-        <Button
-          variant="ghost"
-          size="icon"
+    <tr>
+      <td>
+        <button
+          className="btn btn-sm btn-transparent px-2"
           type="button"
-          onClick={() => orderItem.id !== undefined && onRemove(orderItem.id)}
+          onClick={() => onRemove(orderItem.id)}
         >
           <IconX stroke={2} />
-        </Button>
-      </TableCell>
-      <TableCell className="py-3">
-        <div className="flex items-center gap-4">
+        </button>
+      </td>
+      <td>
+        <div className="d-flex align-items-center gap-4">
           <div style={{ width: '6rem' }}>
             <div
-              className="overflow-auto bg-muted rounded-xl"
+              className="overflow-auto bg-light rounded-3"
               style={{ aspectRatio: '3/4' }}
             >
               {product?.images?.[0]?.path && (
                 <img
-                  className="max-w-full h-auto w-full h-full object-cover"
+                  className="img-fluid w-100 h-100 object-fit-cover"
                   src={product.images[0].path}
                   alt={variant?.code}
                 />
@@ -108,52 +81,47 @@ const ProductRow: React.FC<ProductRowProps> = ({
             </div>
           </div>
           <div>
-            <div className="text-base font-semibold">
+            <div className="h6">
               {product?.code ? (
-                <>
-                    <Link
-                      className="link-reset break-words"
-                      to={`/product/${product.code}`}
-                    >
-                      {orderItem?.productName}
-                    </Link>
-                </>
-                
+                <Link
+                  className="link-reset text-break"
+                  to={`/product/${product.code}`}
+                >
+                  {orderItem?.productName}
+                </Link>
               ) : (
                 orderItem?.productName
               )}
             </div>
-            {optionLabels?.length ? (
-              <small className="text-muted-foreground block">{optionLabels.join(', ')}</small>
-            ) : null}
-            
+            <small className="text-body-tertiary">{variant?.code}</small>
           </div>
         </div>
-      </TableCell>
-      <TableCell className="py-3 text-muted-foreground text-right">
+      </td>
+      <td className="text-black-50 text-end">
         <span>${formatPrice(orderItem.unitPrice)}</span>
-      </TableCell>
-      <TableCell className="py-3">
-        <div className="mt-3 mb-3">
-          <Input
+      </td>
+      <td>
+        <div className="mt-3 field mb-3 required">
+          <input
             type="number"
+            className="form-control"
             min={1}
             onChange={(e) => {
               const newQuantity = e.target.value;
               setLocalQuantity(newQuantity);
               const parsedQuantity = parseInt(newQuantity, 10);
-              if (!isNaN(parsedQuantity) && parsedQuantity > 0 && orderItem.id !== undefined) {
+              if (!isNaN(parsedQuantity) && parsedQuantity > 0) {
                 onUpdate(orderItem.id, parsedQuantity);
               }
             }}
             value={localQuantity}
           />
         </div>
-      </TableCell>
-      <TableCell className="py-3 text-right">
+      </td>
+      <td className="text-end">
         <span>${formatPrice(orderItem.subtotal)}</span>
-      </TableCell>
-    </TableRow>
+      </td>
+    </tr>
   );
 };
 

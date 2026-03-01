@@ -4,12 +4,6 @@ import AccountLayout from "../../layouts/Account";
 import { useCustomer } from "../../context/CustomerContext";
 import { useFlashMessages } from "../../context/FlashMessagesContext";
 import Skeleton from "react-loading-skeleton";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-
-const labelClass = "block text-sm font-medium mb-1";
 
 const ProfilePage: React.FC = () => {
     const { customer, refetchCustomer } = useCustomer();
@@ -42,19 +36,14 @@ const ProfilePage: React.FC = () => {
         setLoading(false);
     }, [customer]);
 
-    const handleInputChange = (
-        e: React.ChangeEvent<HTMLInputElement>
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
+        const { name, value, type } = e.target;
+        const newValue =
+            type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
 
-    const handleGenderChange = (value: string) => {
-        setFormData((prev) => ({ ...prev, gender: value }));
-    };
-
-    const handleNewsletterChange = (checked: boolean | 'indeterminate') => {
-        setFormData((prev) => ({ ...prev, subscribedToNewsletter: checked === true }));
+        setFormData((prev) => ({ ...prev, [name]: newValue }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -97,7 +86,7 @@ const ProfilePage: React.FC = () => {
                     { label: "Personal information", url: "/account/profile/edit" },
                 ]}
             >
-                <div className="w-full md:w-3/4">
+                <div className="col-12 col-md-9">
                     <div className="mb-4">
                         <h1>Your profile</h1>
                         Edit your personal information
@@ -107,84 +96,87 @@ const ProfilePage: React.FC = () => {
                         <Skeleton count={12} height={36} className="mb-2" />
                     ) : (
                         <form onSubmit={handleSubmit}>
-                            <div className="flex flex-wrap -mx-3">
-                                <div className="w-full md:w-1/2 px-3 mb-3">
-                                    <label className={labelClass}>First name *</label>
-                                    <Input
+                            <div className="row">
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">First name *</label>
+                                    <input
+                                        className="form-control"
                                         name="firstName"
                                         value={formData.firstName}
-                                        onChange={handleInputChange}
+                                        onChange={handleChange}
                                         required
                                     />
                                 </div>
-                                <div className="w-full md:w-1/2 px-3 mb-3">
-                                    <label className={labelClass}>Last name *</label>
-                                    <Input
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Last name *</label>
+                                    <input
+                                        className="form-control"
                                         name="lastName"
                                         value={formData.lastName}
-                                        onChange={handleInputChange}
+                                        onChange={handleChange}
                                         required
                                     />
                                 </div>
-                                <div className="w-full px-3 mb-3">
-                                    <label className={labelClass}>Email *</label>
-                                    <Input
+                                <div className="col-12 mb-3">
+                                    <label className="form-label">Email *</label>
+                                    <input
+                                        className="form-control"
                                         name="email"
                                         type="email"
                                         value={formData.email}
-                                        onChange={handleInputChange}
+                                        onChange={handleChange}
                                         required
                                     />
                                 </div>
-                                <div className="w-full md:w-1/2 px-3 mb-3">
-                                    <label className={labelClass}>Birthday</label>
-                                    <Input
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Birthday</label>
+                                    <input
+                                        className="form-control"
                                         name="birthday"
                                         type="date"
                                         value={formData.birthday}
-                                        onChange={handleInputChange}
+                                        onChange={handleChange}
                                     />
                                 </div>
-                                <div className="w-full md:w-1/2 px-3 mb-3">
-                                    <label className={labelClass}>Gender *</label>
-                                    <Select
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Gender *</label>
+                                    <select
+                                        className="form-select"
+                                        name="gender"
                                         value={formData.gender}
-                                        onValueChange={(v) => v && handleGenderChange(v)}
+                                        onChange={handleChange}
                                         required
                                     >
-                                        <SelectTrigger>
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="m">Male</SelectItem>
-                                            <SelectItem value="f">Female</SelectItem>
-                                            <SelectItem value="u">Unknown</SelectItem>
-                                        </SelectContent>
-                                    </Select>
+                                        <option value="m">Male</option>
+                                        <option value="f">Female</option>
+                                        <option value="u">Unknown</option>
+                                    </select>
                                 </div>
-                                <div className="w-full px-3 mb-3">
-                                    <label className={labelClass}>Phone number</label>
-                                    <Input
+                                <div className="col-12 mb-3">
+                                    <label className="form-label">Phone number</label>
+                                    <input
+                                        className="form-control"
                                         name="phoneNumber"
                                         value={formData.phoneNumber}
-                                        onChange={handleInputChange}
+                                        onChange={handleChange}
                                     />
                                 </div>
-                                <div className="w-full px-3 mb-4">
-                                    <div className="flex items-center gap-2">
-                                        <Checkbox
-                                            id="newsletter"
-                                            checked={formData.subscribedToNewsletter}
-                                            onCheckedChange={handleNewsletterChange}
-                                        />
-                                        <label htmlFor="newsletter" className="text-sm">
-                                            Subscribe to the newsletter
-                                        </label>
-                                    </div>
+                                <div className="col-12 mb-4 form-check">
+                                    <input
+                                        type="checkbox"
+                                        id="newsletter"
+                                        className="form-check-input"
+                                        name="subscribedToNewsletter"
+                                        checked={formData.subscribedToNewsletter}
+                                        onChange={handleChange}
+                                    />
+                                    <label htmlFor="newsletter" className="form-check-label">
+                                        Subscribe to the newsletter
+                                    </label>
                                 </div>
                             </div>
 
-                            <Button type="submit">Save changes</Button>
+                            <button className="btn btn-primary">Save changes</button>
                         </form>
                     )}
                 </div>

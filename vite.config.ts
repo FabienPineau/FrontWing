@@ -1,13 +1,11 @@
 import { defineConfig } from 'vite'
-import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  plugins: [tailwindcss(), react()],
+  plugins: [react()],
   resolve: {
     alias: {
       '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs',
-      '@': '/src',
     },
   },
 })

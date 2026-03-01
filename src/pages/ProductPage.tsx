@@ -1,37 +1,31 @@
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
-import { InfoIcon } from 'lucide-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
+import Slider, { Settings } from 'react-slick';
+import { PrevArrow, NextArrow } from '../components/Arrow';
+import Layout from '../layouts/Default';
+import Breadcrumbs from '../components/Breadcrumbs';
+import BootstrapAccordion from '../components/Accordion';
+import ProductCard from '../components/ProductCard';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { Link, useParams } from 'react-router-dom';
-import Slider, { Settings } from 'react-slick';
-import 'slick-carousel/slick/slick-theme.css';
-import 'slick-carousel/slick/slick.css';
-import Lightbox from 'yet-another-react-lightbox';
-import 'yet-another-react-lightbox/styles.css';
-import { NextArrow, PrevArrow } from '../components/Arrow';
-import Breadcrumbs from '../components/Breadcrumbs';
+import { formatPrice } from '../utils/price';
+import { useOrder } from '../context/OrderContext';
+import { useFlashMessages } from '../context/FlashMessagesContext';
 import ReviewList from '../components/product/Reviews';
 import ReviewSummary from '../components/product/ReviewSummary';
 import ReviewSummarySkeleton from '../components/product/ReviewSummarySkeleton';
-import ProductCard from '../components/ProductCard';
-import { useFlashMessages } from '../context/FlashMessagesContext';
-import { useOrder } from '../context/OrderContext';
-import Layout from '../layouts/Default';
+import Lightbox from 'yet-another-react-lightbox';
+import 'yet-another-react-lightbox/styles.css';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import {
     Product,
-    ProductAttribute,
+    ProductVariantDetails,
     ProductOption,
     ProductOptionValue,
+    ProductAttribute,
     ProductReview,
-    ProductVariantDetails,
 } from '../types/Product';
-import { formatPrice } from '../utils/price';
 
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
@@ -54,9 +48,9 @@ const AssociationsSection: React.FC<{
 }> = ({ associations, loading }) => {
     if (loading) {
         return (
-            <div className="container mb-5 relative">
+            <div className="container mb-5 position-relative">
                 <Skeleton width={200} height={24} className="mb-3" />
-                <div className="flex">
+                <div className="d-flex">
                     {Array(4)
                         .fill(0)
                         .map((_, i) => (
@@ -87,8 +81,8 @@ const AssociationsSection: React.FC<{
     return (
         <>
             {associations.map(({ title, products }) => (
-                <div key={title} className="container mb-5 relative">
-                    <h2 className="text-xl font-semibold mb-3">{title}</h2>
+                <div key={title} className="container mb-5 position-relative">
+                    <h2 className="h4 mb-3">{title}</h2>
                     <Slider {...settings}>
                         {products.map((p) => (
                             <div key={p.code} className="px-2">
@@ -307,29 +301,23 @@ const ProductPage: React.FC = () => {
         }
     };
 
-    const labelClass = "block text-sm font-medium mb-1";
-
-
-    const accordionSections = useMemo<{ title: string; content: React.ReactNode }[]>(() => {
+    const accordionItems = useMemo(() => {
         if (!product) return [];
         return [
-            {
-                title: 'Details',
-                content: <p>{product.description}</p>,
-            },
+            { title: 'Details', content: <p>{product.description}</p> },
             {
                 title: 'Attributes',
                 content: attributes.length ? (
-                    <Table>
-                        <TableBody>
-                            {attributes.map((a) => (
-                                <TableRow key={a.id}>
-                                    <TableHead className="font-bold text-left pr-4">{a.name}</TableHead>
-                                    <TableCell>{a.value}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                    <table className="table table-lg table-list">
+                        <tbody>
+                        {attributes.map((a) => (
+                            <tr key={a.id}>
+                                <th className="fw-bold py-3 ps-0">{a.name}</th>
+                                <td className="py-3">{a.value}</td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
                 ) : (
                     <p>No attributes available.</p>
                 ),
@@ -339,38 +327,29 @@ const ProductPage: React.FC = () => {
                 content: reviews.length ? (
                     <>
                         <ReviewList reviews={reviews} />
-                        <div className="flex flex-wrap gap-3">
-                            <Button>
-                                <Link 
-                                    to={`/product/${code}/review/new`}
-                                    className="text-primary-foreground hover:text-primary-foreground! no-underline!"
-                                >
-                                    Add your review
-                                </Link>
-                            </Button>
-                            <a href={`/product/${code}/reviews`} className="inline-flex items-center px-4 py-2 text-sm text-primary hover:underline">
+                        <div className="d-flex flex-wrap gap-3">
+                            <a
+                                href={`/product/${code}/review/new`}
+                                className="btn btn-success px-4 py-2"
+                            >
+                                Add your review
+                            </a>
+                            <a href={`/product/${code}/reviews`} className="btn btn-link">
                                 View more
                             </a>
                         </div>
                     </>
                 ) : (
                     <>
-                        <Alert className="mb-3">
-                            <InfoIcon />
-                            <AlertTitle>Info</AlertTitle>
-                            <AlertDescription>
-                                There are no reviews
-                            </AlertDescription>
-                        </Alert>
-                        <Button>
-                            <Link 
-                                to={`/product/${code}/review/new`}
-                                className="text-primary-foreground hover:text-primary-foreground! no-underline!"
-                            >
-                                Add your review
-                            </Link>
-                        </Button>
-                        
+                        <div className="alert alert-info">
+                            <div className="fw-bold">Info</div>There are no reviews
+                        </div>
+                        <a
+                            href={`/product/${code}/review/new`}
+                            className="btn btn-primary"
+                        >
+                            Add your review
+                        </a>
                     </>
                 ),
             },
@@ -381,41 +360,39 @@ const ProductPage: React.FC = () => {
     const lightboxIndex =
         product?.images?.findIndex((img) => img.path === activeImage) ?? 0;
 
-    if (error) return <div className="text-destructive text-center">{error}</div>;
+    if (error) return <div className="text-danger text-center">{error}</div>;
 
     return (
         <Layout>
             <div className="container mt-4 mb-5">
                 <Breadcrumbs paths={breadcrumbs} />
-                <div className="grid grid-cols-1 lg:grid-cols-[6fr_6fr] gap-6 mb-6">
-                    <div>
-                        <div className="flex flex-wrap mb-5">
+                <div className="row g-3 g-lg-5 mb-6">
+                    <div className="col-12 col-lg-7 col-xl-8">
+                        <div className="row spotlight-group mb-5">
                             {product && product.images.length > 1 && (
-                                <div className="hidden lg:block w-auto pr-4">
-                                    <div className="product-thumbnails flex flex-col overflow-auto">
+                                <div className="col-auto d-none d-lg-block">
+                                    <div className="product-thumbnails d-flex flex-column overflow-auto">
                                         {product.images.map((img) => (
-                                            <Button
+                                            <button
                                                 key={img.id}
-                                                variant="ghost"
-                                                size="icon"
                                                 onClick={() => setActiveImage(img.path)}
-                                                className={`p-0 rounded overflow-hidden w-25 h-auto ${
-                                                    activeImage === img.path ? 'opacity-100' : 'opacity-50 cursor-pointer'
+                                                className={`border-0 p-0 bg-transparent rounded overflow-hidden ${
+                                                    activeImage === img.path ? 'opacity-100' : 'opacity-50'
                                                 }`}
                                             >
                                                 <img
                                                     src={img.path}
                                                     alt="thumbnail"
-                                                    className="w-full h-full object-cover"
+                                                    className="w-100 h-100 object-fit-cover"
                                                 />
-                                            </Button>
+                                            </button>
                                         ))}
                                     </div>
                                 </div>
                             )}
-                            <div className="flex-1">
+                            <div className="col pe-lg-5 pe-xxl-5">
                                 <div
-                                    className="product-main-image-wrapper overflow-hidden bg-muted rounded-xl"
+                                    className="product-main-image-wrapper overflow-hidden bg-light rounded-3"
                                     onClick={() => setLightboxOpen(true)}
                                 >
                                     {loading ? (
@@ -427,17 +404,18 @@ const ProductPage: React.FC = () => {
                                                     activeImage ?? product.images[0].path
                                                 }
                                                 alt={product.name}
-                                                className="max-w-full w-full h-full object-cover"
+                                                className="img-fluid w-100 h-100 object-fit-cover"
                                             />
                                         )
                                     )}
                                 </div>
                             </div>
                         </div>
+                        {!loading && <BootstrapAccordion items={accordionItems} />}
                     </div>
-                    <div>
-                        <div className="sticky top-2 pt-2">
-                            <h1 className="text-2xl font-bold wrap-break-word mb-4">{product?.name}</h1>
+                    <div className="col-12 col-lg-5 col-xl-4 order-lg-1">
+                        <div className="sticky-top pt-2">
+                            <h1 className="h2 text-wrap mb-4">{product?.name}</h1>
                             {loading ? (
                                 <ReviewSummarySkeleton />
                             ) : (
@@ -449,7 +427,7 @@ const ProductPage: React.FC = () => {
                                     />
                                 )
                             )}
-                            <div className="text-2xl mb-3">
+                            <div className="fs-3 mb-3">
                                 {loading ? (
                                     <Skeleton width={100} />
                                 ) : variant?.price != null ? (
@@ -460,64 +438,48 @@ const ProductPage: React.FC = () => {
                             </div>
                             {options.map((opt) => (
                                 <div className="mb-3" key={opt.code}>
-                                    <label className={labelClass}>{opt.name}</label>
-                                    <Select
+                                    <label className="form-label">{opt.name}</label>
+                                    <select
+                                        className="form-select"
                                         value={selectedValues[opt.code] ?? ''}
-                                        onValueChange={(value) => value && handleOptionChange(opt.code, value)}
+                                        onChange={(e) =>
+                                            handleOptionChange(opt.code, e.target.value)
+                                        }
                                     >
-                                        <SelectTrigger>
-                                            <SelectValue>
-                                                {(value: string | null) =>
-                                                    opt.values.find(v => v.code === value)?.value ?? 'Select...'
-                                                }
-                                            </SelectValue>
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {opt.values.map((v) => (
-                                                <SelectItem key={v.code} value={v.code}>
-                                                    {v.value}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
+                                        {opt.values.map((v) => (
+                                            <option key={v.code} value={v.code}>
+                                                {v.value}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             ))}
                             <div className="my-4">
-                                <label className={labelClass}>Quantity</label>
-                                <Input
+                                <label className="form-label">Quantity</label>
+                                <input
                                     type="number"
+                                    className="form-control"
                                     value={quantity}
                                     min={1}
                                     onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
                                 />
-                                <Button
-                                    className="mt-3 cursor-pointer"
+                                <button
+                                    className="btn btn-success px-4 py-2 mt-3"
                                     onClick={handleAddToCart}
                                     disabled={isAddToCartLoading || loading}
                                 >
                                     {isAddToCartLoading ? 'Adding...' : 'Add to cart'}
-                                </Button>
+                                </button>
                             </div>
                             <div className="mb-3">
                                 {product?.shortDescription ?? 'No short description'}
                             </div>
+                            <small className="text-body-tertiary">
+                                {product?.name.replace(/\s+/g, '_')}
+                            </small>
                         </div>
                     </div>
                 </div>
-                {!loading && accordionSections.length > 0 && (
-                    <Accordion defaultValue={["item-0"]} className="w-full">
-                        {accordionSections.map((section, i) => (
-                            <AccordionItem key={i} value={`item-${i}`} className="border-x-0 rounded-none">
-                                <AccordionTrigger className="px-0 hover:no-underline">
-                                    <span className="text-lg font-semibold py-2">{section.title}</span>
-                                </AccordionTrigger>
-                                <AccordionContent className="px-0 pt-2 pb-4">
-                                    {section.content}
-                                </AccordionContent>
-                            </AccordionItem>
-                        ))}
-                    </Accordion>
-                )}
             </div>
 
             <Lightbox

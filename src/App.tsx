@@ -1,7 +1,8 @@
 import React from "react";
+import { BrowserRouter as Router } from "react-router";
 import "react-loading-skeleton/dist/skeleton.css";
-import { BrowserRouter as Router } from "react-router-dom";
 
+import "./assets/scss/main.scss";
 import AppProviders from "./providers/AppProvider.tsx";
 import AppRoutes from "./routes/AppRoutes.tsx";
 

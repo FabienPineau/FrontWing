@@ -9,9 +9,6 @@ import { OrderItem } from '../../types/Order';
 import { formatPrice } from '../../utils/price';
 import { useNavigate } from 'react-router-dom';
 import Steps from '../../components/checkout/Steps';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 
 const SummaryPage: React.FC = () => {
@@ -61,34 +58,34 @@ const SummaryPage: React.FC = () => {
 
   return (
       <CheckoutLayout sidebarOn={false}>
-        <div className="flex-1 pt-4 pb-5">
+        <div className="col pt-4 pb-5">
           <div className="mx-auto">
             <Steps activeStep="complete" />
-            <h1 className="text-lg font-semibold mb-4">Order #{order?.number}</h1>
+            <h1 className="h5 mb-4">Order #{order?.number}</h1>
 
             {order && (
-                <div className="bg-muted rounded-lg mb-3">
-                  <div className="p-4 flex flex-col gap-1">
-                    <div className="flex flex-wrap -mx-4">
-                      <div className="w-full sm:w-1/3 px-4">Currency</div>
-                      <div className="flex-1 px-4">{order.currencyCode}</div>
+                <div className="card border-0 bg-body-tertiary mb-3">
+                  <div className="card-body d-flex flex-column gap-1">
+                    <div className="row">
+                      <div className="col-12 col-sm-4">Currency</div>
+                      <div className="col">{order.currencyCode}</div>
                     </div>
-                    <div className="flex flex-wrap -mx-4">
-                      <div className="w-full sm:w-1/3 px-4">Locale</div>
-                      <div className="flex-1 px-4">{order.localeCode}</div>
+                    <div className="row">
+                      <div className="col-12 col-sm-4">Locale</div>
+                      <div className="col">{order.localeCode}</div>
                     </div>
                   </div>
                 </div>
             )}
 
             <form onSubmit={handleSubmit} noValidate>
-              <div className="flex flex-wrap -mx-4">
-                <div className="w-full md:w-1/2 px-4 mb-3">
+              <div className="row">
+                <div className="col-12 col-md-6 mb-3">
                   {order?.billingAddress && (
                       <Address sectionName="Billing address" address={order.billingAddress} />
                   )}
                 </div>
-                <div className="w-full md:w-1/2 px-4 mb-3">
+                <div className="col-12 col-md-6 mb-3">
                   {order?.shippingAddress && (
                       <Address sectionName="Shipping address" address={order.shippingAddress} />
                   )}
@@ -106,67 +103,68 @@ const SummaryPage: React.FC = () => {
                 {order?.shipments && <ShipmentsCard shipment={order?.shipments[0]} />}
               </div>
 
-              <div className="border-b mb-4">
-                <Table>
-                  <TableHeader>
-                  <TableRow>
-                    <TableHead className="text-left">Item</TableHead>
-                    <TableHead className="text-right">Unit price</TableHead>
-                    <TableHead className="text-right">Qty</TableHead>
-                    <TableHead className="text-right">Subtotal</TableHead>
-                  </TableRow>
-                  </TableHeader>
-                  <TableBody>
+              <div className="table-responsive border-bottom mb-4">
+                <table className="table table-borderless table-space align-middle mb-0">
+                  <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th className="text-end">Unit price</th>
+                    <th className="text-end">Qty</th>
+                    <th className="text-end">Subtotal</th>
+                  </tr>
+                  </thead>
+                  <tbody>
                   {order?.items?.map((item: OrderItem) => (
                       <ProductRow orderItem={item} key={item.id} />
                   ))}
-                  </TableBody>
-                </Table>
+                  </tbody>
+                </table>
               </div>
 
-              <Table className="ml-auto mb-6">
-                <TableBody>
-                <TableRow>
-                  <TableCell className="text-right w-3/4 py-1 pr-4">Items total:</TableCell>
-                  <TableCell className="text-right py-1">${formatPrice(order?.itemsSubtotal ?? 0)}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="text-right pr-4 py-1">Taxes total:</TableCell>
-                  <TableCell className="text-right py-1">
+              <table className="table table-borderless align-middle ms-auto mb-6">
+                <tbody>
+                <tr>
+                  <td className="text-end w-75">Items total:</td>
+                  <td className="text-end">${formatPrice(order?.itemsSubtotal ?? 0)}</td>
+                </tr>
+                <tr>
+                  <td className="text-end w-75">Taxes total:</td>
+                  <td className="text-end">
                     <div>${formatPrice(order?.taxTotal ?? 0)}</div>
-                    <small className="text-muted-foreground">Included in price</small>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="text-right pr-4 py-1">Discount:</TableCell>
-                  <TableCell className="text-right py-1">${formatPrice(order?.orderPromotionTotal ?? 0)}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="text-right pr-4 py-1">Shipping total:</TableCell>
-                  <TableCell className="text-right py-1">${formatPrice(order?.shippingTotal ?? 0)}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="text-lg font-semibold text-right border-t pt-4 pr-4">Total:</TableCell>
-                  <TableCell className="text-lg font-semibold text-right border-t pt-4">${formatPrice(order?.total ?? 0)}</TableCell>
-                </TableRow>
-                </TableBody>
-              </Table>
+                    <small className="text-body-tertiary">Included in price</small>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="text-end w-75">Discount:</td>
+                  <td className="text-end">${formatPrice(order?.orderPromotionTotal ?? 0)}</td>
+                </tr>
+                <tr>
+                  <td className="text-end w-75">Shipping total:</td>
+                  <td className="text-end">${formatPrice(order?.shippingTotal ?? 0)}</td>
+                </tr>
+                <tr>
+                  <td className="h5 text-end border-top pt-4 mt-3">Total:</td>
+                  <td className="h5 text-end border-top pt-4 mt-3">${formatPrice(order?.total ?? 0)}</td>
+                </tr>
+                </tbody>
+              </table>
 
-              <div className="mb-3">
-                <label htmlFor="sylius_checkout_complete_notes" className="block text-sm font-medium mb-1">
+              <div className="field mb-3">
+                <label htmlFor="sylius_checkout_complete_notes" className="form-label">
                   Extra notes
                 </label>
-                <Textarea
+                <textarea
                     id="sylius_checkout_complete_notes"
+                    className="form-control"
                     value={extraNotes}
                     onChange={(e) => setExtraNotes(e.target.value)}
                 />
               </div>
 
               <div className="text-center">
-                <Button type="submit" disabled={isSubmitting}>
+                <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
                   Place order
-                </Button>
+                </button>
               </div>
             </form>
           </div>

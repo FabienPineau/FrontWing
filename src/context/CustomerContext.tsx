@@ -45,9 +45,9 @@ export const CustomerProvider: React.FC<{ children: React.ReactNode }> = ({
       const data = await response.json();
 
       setCustomer(data);
-    } catch (err: unknown) {
+    } catch (err: any) {
       setCustomer(null);
-      setError(err instanceof Error ? err.message : "Failed to load user");
+      setError(err.message || "Failed to load user");
     } finally {
       setLoading(false);
     }
