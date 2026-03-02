@@ -4,7 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { IconLockOpen } from "@tabler/icons-react";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCustomer } from "../context/CustomerContext";
 import Default from "../layouts/Default";
 
@@ -129,12 +129,9 @@ const LoginPage: React.FC = () => {
               </form>
 
               <div className="text-center">
-                <a
-                  className="text-primary text-sm hover:underline"
-                  href="/en_US/forgotten-password"
-                >
+                <Link to="/forgot-password" className="text-primary text-sm hover:underline">
                   Forgot password?
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -146,13 +143,13 @@ const LoginPage: React.FC = () => {
                   <IconLockOpen stroke={2} size={144} color={"#22b99a"} />
                 </div>
                 <h2>Don't have an account?</h2>
-                <a
+                <Link
+                  to="/register"
                   className="text-primary hover:underline"
                   id="register-here-button"
-                  href="/en_US/register"
                 >
                   Register here
-                </a>
+                </Link>
               </div>
             </div>
           </div>
