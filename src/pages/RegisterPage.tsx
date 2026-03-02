@@ -1,6 +1,13 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -10,24 +17,36 @@ const labelClass = "block text-sm font-medium mb-1";
 
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    gender: "u",
+    password: "",
+    confirmPassword: "",
+  });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleGenderChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, gender: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
 
-    if (password !== confirmPassword) {
+    if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
-    if (password.length < 8) {
+    if (formData.password.length < 8) {
       setError("Password must be at least 8 characters");
       return;
     }
@@ -40,10 +59,11 @@ const RegisterPage: React.FC = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            firstName,
-            lastName,
-            email,
-            plainPassword: password,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            gender: formData.gender,
+            password: formData.password,
             subscribedToNewsletter: false,
           }),
         }
@@ -66,7 +86,7 @@ const RegisterPage: React.FC = () => {
   return (
     <Default>
       <div className="container my-auto">
-        <div className="mx-auto my-8 w-full max-w-md">
+        <div className="mx-auto my-8 w-full max-w-lg">
           <h1 className="mb-5 text-2xl font-bold">Create an account</h1>
           <form onSubmit={handleSubmit} noValidate>
             {error && (
@@ -75,72 +95,92 @@ const RegisterPage: React.FC = () => {
               </Alert>
             )}
 
-            <div className="mb-3">
-              <label htmlFor="firstName" className={labelClass}>
-                First name
-              </label>
-              <Input
-                id="firstName"
-                name="firstName"
-                required
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </div>
+            <div className="-mx-3 flex flex-wrap">
+              <div className="mb-3 w-full px-3 md:w-1/2">
+                <label htmlFor="firstName" className={labelClass}>
+                  First name *
+                </label>
+                <Input
+                  id="firstName"
+                  name="firstName"
+                  required
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                />
+              </div>
 
-            <div className="mb-3">
-              <label htmlFor="lastName" className={labelClass}>
-                Last name
-              </label>
-              <Input
-                id="lastName"
-                name="lastName"
-                required
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </div>
+              <div className="mb-3 w-full px-3 md:w-1/2">
+                <label htmlFor="lastName" className={labelClass}>
+                  Last name *
+                </label>
+                <Input
+                  id="lastName"
+                  name="lastName"
+                  required
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                />
+              </div>
 
-            <div className="mb-3">
-              <label htmlFor="email" className={labelClass}>
-                Email
-              </label>
-              <Input
-                id="email"
-                type="email"
-                name="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
+              <div className="mb-3 w-full px-3 md:w-1/2">
+                <label className={labelClass}>Gender *</label>
+                <Select
+                  value={formData.gender}
+                  onValueChange={(v) => v && handleGenderChange(v)}
+                  required
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="m">Male</SelectItem>
+                    <SelectItem value="f">Female</SelectItem>
+                    <SelectItem value="u">Unknown</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <div className="mb-3">
-              <label htmlFor="password" className={labelClass}>
-                Password
-              </label>
-              <Input
-                id="password"
-                type="password"
-                name="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
+              <div className="mb-3 w-full px-3 md:w-1/2">
+                <label htmlFor="email" className={labelClass}>
+                  Email *
+                </label>
+                <Input
+                  id="email"
+                  type="email"
+                  name="email"
+                  required
+                  value={formData.email}
+                  onChange={handleInputChange}
+                />
+              </div>
 
-            <div className="mb-5">
-              <label htmlFor="confirmPassword" className={labelClass}>
-                Confirm password
-              </label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                name="confirmPassword"
-                required
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
+              <div className="mb-3 w-full px-3 md:w-1/2">
+                <label htmlFor="password" className={labelClass}>
+                  Password *
+                </label>
+                <Input
+                  id="password"
+                  type="password"
+                  name="password"
+                  required
+                  value={formData.password}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="mb-5 w-full px-3 md:w-1/2">
+                <label htmlFor="confirmPassword" className={labelClass}>
+                  Confirm password *
+                </label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  name="confirmPassword"
+                  required
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                />
+              </div>
             </div>
 
             <Button type="submit" className="mb-3 w-full" disabled={loading}>
