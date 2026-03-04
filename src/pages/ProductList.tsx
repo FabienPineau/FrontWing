@@ -5,6 +5,7 @@ import Breadcrumbs from "../components/Breadcrumbs";
 import ProductCard from "../components/ProductCard";
 import ProductToolbar from "../components/taxons/ProductToolbar";
 import Layout from "../layouts/Default";
+import NotFoundPage from "./NotFoundPage";
 import { Product } from "../types/Product";
 
 interface TaxonDetails {
@@ -167,6 +168,7 @@ const ProductList: React.FC = () => {
   }, [loadMore]);
 
   if (error) return <div className="text-destructive text-center">{error}</div>;
+  if (!loading && taxonDetails === null) return <NotFoundPage />;
 
   const isInChildTaxon = !!childCode && !!taxonDetails?.parent;
 
