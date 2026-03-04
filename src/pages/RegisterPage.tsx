@@ -129,7 +129,7 @@ const RegisterPage: React.FC = () => {
                   onValueChange={(v) => v && handleGenderChange(v)}
                   required
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
