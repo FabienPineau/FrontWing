@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Default from "../../layouts/Default";
 import AccountLayout from "../../layouts/Account";
 import { useFlashMessages } from "../../context/FlashMessagesContext";
-import AddressForm from "../../components/account/AddressForm";
+import AddressForm, { type AnyFormApi } from "../../components/account/AddressForm";
 import { Button } from "@/components/ui/button";
 import { useForm } from "@tanstack/react-form";
 import { addressSchema, AddressValues } from "@/schemas/address";
@@ -32,7 +32,7 @@ const AddAddressPage: React.FC = () => {
   const [countries, setCountries] = useState<Country[]>([]);
   const [loadingCountries, setLoadingCountries] = useState(true);
 
-  const form = useForm<AddressValues>({
+  const form = useForm({
     defaultValues: emptyAddressValues,
     validators: {
       onSubmit: addressSchema,
@@ -102,7 +102,11 @@ const AddAddressPage: React.FC = () => {
             }}
           >
             <div className="mb-4">
-              <AddressForm form={form} countries={countries} loadingCountries={loadingCountries} />
+              <AddressForm
+                form={form as unknown as AnyFormApi}
+                countries={countries}
+                loadingCountries={loadingCountries}
+              />
             </div>
 
             <form.Subscribe selector={(state) => state.isSubmitting}>

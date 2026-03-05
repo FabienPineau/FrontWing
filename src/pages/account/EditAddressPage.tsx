@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { useNavigate, useParams } from "react-router-dom";
-import AddressForm from "../../components/account/AddressForm";
+import AddressForm, { type AnyFormApi } from "../../components/account/AddressForm";
 import { useFlashMessages } from "../../context/FlashMessagesContext";
 import AccountLayout from "../../layouts/Account";
 import Default from "../../layouts/Default";
@@ -36,7 +36,7 @@ const EditAddressPage: React.FC = () => {
   const [loadingAddress, setLoadingAddress] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  const form = useForm<AddressValues>({
+  const form = useForm({
     defaultValues: emptyAddressValues,
     validators: {
       onSubmit: addressSchema,
@@ -156,7 +156,7 @@ const EditAddressPage: React.FC = () => {
             >
               <div className="mb-4">
                 <AddressForm
-                  form={form}
+                  form={form as unknown as AnyFormApi}
                   countries={countries}
                   loadingCountries={loadingCountries}
                 />

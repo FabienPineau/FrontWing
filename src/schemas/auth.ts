@@ -3,13 +3,13 @@ import { z } from "zod";
 export const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(1, "Password is required"),
-  remember_me: z.boolean().optional(),
+  remember_me: z.boolean(),
 });
 export type LoginValues = z.infer<typeof loginSchema>;
 
 export const registerSchema = z
   .object({
-    gender: z.string().optional(),
+    gender: z.string(),
     firstName: z.string().min(1, "First name is required"),
     lastName: z.string().min(1, "Last name is required"),
     email: z.string().email("Invalid email address"),
@@ -20,7 +20,7 @@ export const registerSchema = z
       .regex(/[0-9]/, "Must contain a number")
       .regex(/[^A-Za-z0-9]/, "Must contain a symbol"),
     confirmPassword: z.string().min(1, "Please confirm your password"),
-    subscribedToNewsletter: z.boolean().optional(),
+    subscribedToNewsletter: z.boolean(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",

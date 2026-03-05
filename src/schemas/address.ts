@@ -3,13 +3,13 @@ import { z } from "zod";
 export const addressSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
-  company: z.string().optional(),
+  company: z.string(),
   street: z.string().min(1, "Street address is required"),
   countryCode: z.string().min(1, "Country is required"),
-  provinceName: z.string().optional(),
+  provinceName: z.string(),
   city: z.string().min(1, "City is required"),
   postcode: z.string().min(1, "Postcode is required"),
-  phoneNumber: z.string().optional(),
+  phoneNumber: z.string(),
 });
 export type AddressValues = z.infer<typeof addressSchema>;
 

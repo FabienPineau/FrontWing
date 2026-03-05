@@ -11,7 +11,7 @@ import { useFlashMessages } from "../../context/FlashMessagesContext";
 import Layout from "../../layouts/Default";
 import { Product } from "../../types/Product";
 import { useForm } from "@tanstack/react-form";
-import { reviewSchema, ReviewValues } from "@/schemas/review";
+import { reviewSchema } from "@/schemas/review";
 
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
@@ -26,7 +26,7 @@ const AddReviewPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [breadcrumbs, setBreadcrumbs] = useState<{ label: string; url: string }[]>([]);
 
-  const form = useForm<ReviewValues>({
+  const form = useForm({
     defaultValues: {
       rating: 5,
       title: "",

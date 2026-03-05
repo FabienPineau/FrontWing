@@ -8,11 +8,7 @@ import { useFlashMessages } from "../../context/FlashMessagesContext.tsx";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "@tanstack/react-form";
-import {
-  changePasswordSchema,
-  ChangePasswordValues,
-  ChangePasswordPayload,
-} from "@/schemas/account";
+import { changePasswordSchema, ChangePasswordPayload } from "@/schemas/account";
 
 const labelClass = "block text-sm font-medium mb-1";
 
@@ -21,7 +17,7 @@ const ChangePasswordPage: React.FC = () => {
   const navigate = useNavigate();
   const { addMessage } = useFlashMessages();
 
-  const form = useForm<ChangePasswordValues>({
+  const form = useForm({
     defaultValues: {
       currentPassword: "",
       newPassword: "",

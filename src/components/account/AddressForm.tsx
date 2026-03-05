@@ -8,8 +8,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { FormApi } from "@tanstack/react-form";
-import type { AddressValues } from "@/schemas";
+// Structural interface to avoid the 12-parameter ReactFormExtendedApi generics.
+// `any` on name/selector allows the actual TanStack Field (which narrows `name` to a union) to be
+// assignable here via TypeScript's contravariance rules.
+/* eslint-disable @typescript-eslint/no-explicit-any */
+type FieldApi = {
+  state: { value: any; meta: { errors: unknown[] } };
+  handleChange: (v: any) => void;
+  handleBlur: () => void;
+};
+export type AnyFormApi = {
+  Field: (props: {
+    name: any;
+    children: (field: FieldApi) => React.ReactNode;
+    [key: string]: any;
+  }) => React.ReactNode;
+  Subscribe: (props: {
+    selector?: (state: any) => any;
+    children: (value: any) => React.ReactNode;
+  }) => React.ReactNode;
+};
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 interface Country {
   code: string;
@@ -17,7 +36,7 @@ interface Country {
 }
 
 interface AddressFormProps {
-  form: FormApi<AddressValues, undefined>;
+  form: AnyFormApi;
   countries: Country[];
   loadingCountries: boolean;
   errors?: Record<string, string>;

@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { registerSchema } from "@/schemas/auth";
-import { useForm } from "@tanstack/react-form";
+import { useForm, useStore } from "@tanstack/react-form";
 import { IconEye, IconEyeOff, IconLockOpen } from "@tabler/icons-react";
 import { AlertCircleIcon } from "lucide-react";
 import React, { useMemo, useState } from "react";
@@ -45,7 +45,7 @@ const RegisterPage: React.FC = () => {
       gender: "u",
       password: "",
       confirmPassword: "",
-      subscribedToNewsletter: false as boolean | undefined,
+      subscribedToNewsletter: false,
     },
     validators: { onSubmit: registerSchema },
     onSubmit: async ({ value }) => {
@@ -95,7 +95,7 @@ const RegisterPage: React.FC = () => {
   });
 
   // Subscribe to password field value for strength indicator
-  const passwordValue = form.useStore((s) => s.values.password);
+  const passwordValue = useStore(form.store, (s) => s.values.password);
 
   // Memoized password strength calculation (0 to 4)
   const passwordStrength = useMemo(() => {

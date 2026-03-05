@@ -27,7 +27,7 @@ const LoginPage: React.FC = () => {
     defaultValues: {
       email: "",
       password: "",
-      remember_me: false as boolean | undefined,
+      remember_me: false,
     },
     validators: { onSubmit: loginSchema },
     onSubmit: async ({ value }) => {

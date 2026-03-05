@@ -16,7 +16,7 @@ import Steps from "../../components/checkout/Steps";
 import { useCustomer } from "../../context/CustomerContext";
 import { useOrder } from "../../context/OrderContext";
 import CheckoutLayout from "../../layouts/Checkout";
-import { addressSchema, AddressValues, CheckoutAddressValues } from "@/schemas/address";
+import { addressSchema, AddressValues } from "@/schemas/address";
 
 interface Country {
   code: string;
@@ -47,7 +47,7 @@ const AddressPage: React.FC = () => {
 
   const isInitialized = useRef(false);
 
-  const form = useForm<CheckoutAddressValues>({
+  const form = useForm({
     defaultValues: {
       email: "",
       billingAddress: emptyAddress,

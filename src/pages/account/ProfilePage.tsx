@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useForm } from "@tanstack/react-form";
-import { profileSchema, ProfileValues } from "@/schemas/account";
+import { profileSchema } from "@/schemas/account";
 
 const labelClass = "block text-sm font-medium mb-1";
 
@@ -23,7 +23,7 @@ const ProfilePage: React.FC = () => {
   const { customer, refetchCustomer } = useCustomer();
   const { addMessage } = useFlashMessages();
 
-  const form = useForm<ProfileValues>({
+  const form = useForm({
     defaultValues: {
       firstName: "",
       lastName: "",
