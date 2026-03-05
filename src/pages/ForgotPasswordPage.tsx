@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { forgotPasswordSchema } from "@/schemas/auth";
 import { useForm } from "@tanstack/react-form";
-import { zodValidator } from "@tanstack/zod-form-adapter";
 import React from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
@@ -15,7 +14,6 @@ const ForgotPasswordPage: React.FC = () => {
     defaultValues: {
       email: "",
     },
-    validatorAdapter: zodValidator(),
     validators: { onSubmit: forgotPasswordSchema },
     onSubmit: async ({ value }) => {
       try {
@@ -66,8 +64,10 @@ const ForgotPasswordPage: React.FC = () => {
                       onChange={(e) => field.handleChange(e.target.value)}
                       onBlur={field.handleBlur}
                     />
-                    {field.state.meta.errors[0] && (
-                      <span className="text-destructive text-sm">{field.state.meta.errors[0]}</span>
+                    {field.state.meta.errors.length > 0 && (
+                      <span className="text-destructive text-sm">
+                        {String(field.state.meta.errors[0])}
+                      </span>
                     )}
                   </>
                 )}

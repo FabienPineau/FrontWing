@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { resetPasswordSchema } from "@/schemas/auth";
 import { useForm } from "@tanstack/react-form";
-import { zodValidator } from "@tanstack/zod-form-adapter";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -21,7 +20,6 @@ const ResetPasswordPage: React.FC = () => {
       newPassword: "",
       confirmNewPassword: "",
     },
-    validatorAdapter: zodValidator(),
     validators: { onSubmit: resetPasswordSchema },
     onSubmit: async ({ value }) => {
       setError(null);
@@ -89,8 +87,10 @@ const ResetPasswordPage: React.FC = () => {
                       onChange={(e) => field.handleChange(e.target.value)}
                       onBlur={field.handleBlur}
                     />
-                    {field.state.meta.errors[0] && (
-                      <span className="text-destructive text-sm">{field.state.meta.errors[0]}</span>
+                    {field.state.meta.errors.length > 0 && (
+                      <span className="text-destructive text-sm">
+                        {String(field.state.meta.errors[0])}
+                      </span>
                     )}
                   </>
                 )}
@@ -113,8 +113,10 @@ const ResetPasswordPage: React.FC = () => {
                       onChange={(e) => field.handleChange(e.target.value)}
                       onBlur={field.handleBlur}
                     />
-                    {field.state.meta.errors[0] && (
-                      <span className="text-destructive text-sm">{field.state.meta.errors[0]}</span>
+                    {field.state.meta.errors.length > 0 && (
+                      <span className="text-destructive text-sm">
+                        {String(field.state.meta.errors[0])}
+                      </span>
                     )}
                   </>
                 )}

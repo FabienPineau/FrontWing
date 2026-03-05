@@ -4,7 +4,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { loginSchema } from "@/schemas/auth";
 import { useForm } from "@tanstack/react-form";
-import { zodValidator } from "@tanstack/zod-form-adapter";
 import { IconEye, IconEyeOff, IconLockOpen } from "@tabler/icons-react";
 import React, { useCallback, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -28,9 +27,8 @@ const LoginPage: React.FC = () => {
     defaultValues: {
       email: "",
       password: "",
-      remember_me: false,
+      remember_me: false as boolean | undefined,
     },
-    validatorAdapter: zodValidator(),
     validators: { onSubmit: loginSchema },
     onSubmit: async ({ value }) => {
       setError(null);
@@ -113,9 +111,9 @@ const LoginPage: React.FC = () => {
                             onChange={(e) => field.handleChange(e.target.value)}
                             onBlur={field.handleBlur}
                           />
-                          {field.state.meta.errors[0] && (
+                          {field.state.meta.errors.length > 0 && (
                             <span className="text-destructive text-sm">
-                              {field.state.meta.errors[0]}
+                              {String(field.state.meta.errors[0])}
                             </span>
                           )}
                         </>
@@ -154,9 +152,9 @@ const LoginPage: React.FC = () => {
                               )}
                             </button>
                           </div>
-                          {field.state.meta.errors[0] && (
+                          {field.state.meta.errors.length > 0 && (
                             <span className="text-destructive text-sm">
-                              {field.state.meta.errors[0]}
+                              {String(field.state.meta.errors[0])}
                             </span>
                           )}
                         </>

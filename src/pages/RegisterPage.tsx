@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/select";
 import { registerSchema } from "@/schemas/auth";
 import { useForm } from "@tanstack/react-form";
-import { zodValidator } from "@tanstack/zod-form-adapter";
 import { IconEye, IconEyeOff, IconLockOpen } from "@tabler/icons-react";
 import { AlertCircleIcon } from "lucide-react";
 import React, { useMemo, useState } from "react";
@@ -46,9 +45,8 @@ const RegisterPage: React.FC = () => {
       gender: "u",
       password: "",
       confirmPassword: "",
-      subscribedToNewsletter: false,
+      subscribedToNewsletter: false as boolean | undefined,
     },
-    validatorAdapter: zodValidator(),
     validators: { onSubmit: registerSchema },
     onSubmit: async ({ value }) => {
       setError(null);
@@ -193,9 +191,9 @@ const RegisterPage: React.FC = () => {
                             onBlur={field.handleBlur}
                             required
                           />
-                          {field.state.meta.errors[0] && (
+                          {field.state.meta.errors.length > 0 && (
                             <span className="text-destructive text-sm">
-                              {field.state.meta.errors[0]}
+                              {String(field.state.meta.errors[0])}
                             </span>
                           )}
                         </>
@@ -218,9 +216,9 @@ const RegisterPage: React.FC = () => {
                             onBlur={field.handleBlur}
                             required
                           />
-                          {field.state.meta.errors[0] && (
+                          {field.state.meta.errors.length > 0 && (
                             <span className="text-destructive text-sm">
-                              {field.state.meta.errors[0]}
+                              {String(field.state.meta.errors[0])}
                             </span>
                           )}
                         </>
@@ -244,9 +242,9 @@ const RegisterPage: React.FC = () => {
                             onBlur={field.handleBlur}
                             required
                           />
-                          {field.state.meta.errors[0] && (
+                          {field.state.meta.errors.length > 0 && (
                             <span className="text-destructive text-sm">
-                              {field.state.meta.errors[0]}
+                              {String(field.state.meta.errors[0])}
                             </span>
                           )}
                         </>
@@ -281,9 +279,9 @@ const RegisterPage: React.FC = () => {
                               {showPassword ? <IconEyeOff size={18} /> : <IconEye size={18} />}
                             </button>
                           </div>
-                          {field.state.meta.errors[0] && (
+                          {field.state.meta.errors.length > 0 && (
                             <span className="text-destructive text-sm">
-                              {field.state.meta.errors[0]}
+                              {String(field.state.meta.errors[0])}
                             </span>
                           )}
                         </>
@@ -337,9 +335,9 @@ const RegisterPage: React.FC = () => {
                               )}
                             </button>
                           </div>
-                          {field.state.meta.errors[0] && (
+                          {field.state.meta.errors.length > 0 && (
                             <span className="text-destructive text-sm">
-                              {field.state.meta.errors[0]}
+                              {String(field.state.meta.errors[0])}
                             </span>
                           )}
                         </>
