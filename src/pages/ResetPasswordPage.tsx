@@ -2,6 +2,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { resetPasswordSchema } from "@/schemas/auth";
+import { formError } from "@/lib/utils";
 import { useForm } from "@tanstack/react-form";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -89,7 +90,7 @@ const ResetPasswordPage: React.FC = () => {
                     />
                     {field.state.meta.errors.length > 0 && (
                       <span className="text-destructive text-sm">
-                        {String(field.state.meta.errors[0])}
+                        {formError(field.state.meta.errors[0])}
                       </span>
                     )}
                   </>
@@ -115,7 +116,7 @@ const ResetPasswordPage: React.FC = () => {
                     />
                     {field.state.meta.errors.length > 0 && (
                       <span className="text-destructive text-sm">
-                        {String(field.state.meta.errors[0])}
+                        {formError(field.state.meta.errors[0])}
                       </span>
                     )}
                   </>

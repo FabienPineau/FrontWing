@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "@tanstack/react-form";
 import { changePasswordSchema, ChangePasswordPayload } from "@/schemas/account";
+import { formError } from "@/lib/utils";
 
 const labelClass = "block text-sm font-medium mb-1";
 
@@ -122,7 +123,7 @@ const ChangePasswordPage: React.FC = () => {
                               />
                               {field.state.meta.errors.length > 0 && (
                                 <div className="text-destructive mt-1 text-sm">
-                                  {String(field.state.meta.errors[0])}
+                                  {formError(field.state.meta.errors[0])}
                                 </div>
                               )}
                             </>
@@ -145,7 +146,7 @@ const ChangePasswordPage: React.FC = () => {
                               />
                               {field.state.meta.errors.length > 0 && (
                                 <div className="text-destructive mt-1 text-sm">
-                                  {String(field.state.meta.errors[0])}
+                                  {formError(field.state.meta.errors[0])}
                                 </div>
                               )}
                             </>
@@ -168,7 +169,7 @@ const ChangePasswordPage: React.FC = () => {
                               />
                               {field.state.meta.errors.length > 0 && (
                                 <div className="text-destructive mt-1 text-sm">
-                                  {String(field.state.meta.errors[0])}
+                                  {formError(field.state.meta.errors[0])}
                                 </div>
                               )}
                             </>

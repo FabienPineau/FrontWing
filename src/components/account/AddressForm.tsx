@@ -1,6 +1,7 @@
 import React from "react";
 import Skeleton from "react-loading-skeleton";
 import { Input } from "@/components/ui/input";
+import { formError } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -60,7 +61,9 @@ const AddressForm: React.FC<AddressFormProps> = ({ form, countries, loadingCount
               aria-invalid={field.state.meta.errors.length > 0 || undefined}
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-destructive mt-1 text-sm">{String(field.state.meta.errors[0])}</p>
+              <p className="text-destructive mt-1 text-sm">
+                {formError(field.state.meta.errors[0])}
+              </p>
             )}
           </>
         )}
@@ -79,7 +82,9 @@ const AddressForm: React.FC<AddressFormProps> = ({ form, countries, loadingCount
               aria-invalid={field.state.meta.errors.length > 0 || undefined}
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-destructive mt-1 text-sm">{String(field.state.meta.errors[0])}</p>
+              <p className="text-destructive mt-1 text-sm">
+                {formError(field.state.meta.errors[0])}
+              </p>
             )}
           </>
         )}
@@ -110,7 +115,9 @@ const AddressForm: React.FC<AddressFormProps> = ({ form, countries, loadingCount
               aria-invalid={field.state.meta.errors.length > 0 || undefined}
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-destructive mt-1 text-sm">{String(field.state.meta.errors[0])}</p>
+              <p className="text-destructive mt-1 text-sm">
+                {formError(field.state.meta.errors[0])}
+              </p>
             )}
           </>
         )}
@@ -142,7 +149,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ form, countries, loadingCount
               </Select>
               {field.state.meta.errors.length > 0 && (
                 <p className="text-destructive mt-1 text-sm">
-                  {String(field.state.meta.errors[0])}
+                  {formError(field.state.meta.errors[0])}
                 </p>
               )}
             </>
@@ -181,7 +188,9 @@ const AddressForm: React.FC<AddressFormProps> = ({ form, countries, loadingCount
               aria-invalid={field.state.meta.errors.length > 0 || undefined}
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-destructive mt-1 text-sm">{String(field.state.meta.errors[0])}</p>
+              <p className="text-destructive mt-1 text-sm">
+                {formError(field.state.meta.errors[0])}
+              </p>
             )}
           </>
         )}
@@ -200,7 +209,9 @@ const AddressForm: React.FC<AddressFormProps> = ({ form, countries, loadingCount
               aria-invalid={field.state.meta.errors.length > 0 || undefined}
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-destructive mt-1 text-sm">{String(field.state.meta.errors[0])}</p>
+              <p className="text-destructive mt-1 text-sm">
+                {formError(field.state.meta.errors[0])}
+              </p>
             )}
           </>
         )}

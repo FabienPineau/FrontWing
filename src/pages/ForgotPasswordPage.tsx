@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { forgotPasswordSchema } from "@/schemas/auth";
+import { formError } from "@/lib/utils";
 import { useForm } from "@tanstack/react-form";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -66,7 +67,7 @@ const ForgotPasswordPage: React.FC = () => {
                     />
                     {field.state.meta.errors.length > 0 && (
                       <span className="text-destructive text-sm">
-                        {String(field.state.meta.errors[0])}
+                        {formError(field.state.meta.errors[0])}
                       </span>
                     )}
                   </>

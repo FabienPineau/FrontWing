@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { registerSchema } from "@/schemas/auth";
+import { formError } from "@/lib/utils";
 import { useForm, useStore } from "@tanstack/react-form";
 import { IconEye, IconEyeOff, IconLockOpen } from "@tabler/icons-react";
 import { AlertCircleIcon } from "lucide-react";
@@ -193,7 +194,7 @@ const RegisterPage: React.FC = () => {
                           />
                           {field.state.meta.errors.length > 0 && (
                             <span className="text-destructive text-sm">
-                              {String(field.state.meta.errors[0])}
+                              {formError(field.state.meta.errors[0])}
                             </span>
                           )}
                         </>
@@ -218,7 +219,7 @@ const RegisterPage: React.FC = () => {
                           />
                           {field.state.meta.errors.length > 0 && (
                             <span className="text-destructive text-sm">
-                              {String(field.state.meta.errors[0])}
+                              {formError(field.state.meta.errors[0])}
                             </span>
                           )}
                         </>
@@ -244,7 +245,7 @@ const RegisterPage: React.FC = () => {
                           />
                           {field.state.meta.errors.length > 0 && (
                             <span className="text-destructive text-sm">
-                              {String(field.state.meta.errors[0])}
+                              {formError(field.state.meta.errors[0])}
                             </span>
                           )}
                         </>
@@ -281,7 +282,7 @@ const RegisterPage: React.FC = () => {
                           </div>
                           {field.state.meta.errors.length > 0 && (
                             <span className="text-destructive text-sm">
-                              {String(field.state.meta.errors[0])}
+                              {formError(field.state.meta.errors[0])}
                             </span>
                           )}
                         </>
@@ -337,7 +338,7 @@ const RegisterPage: React.FC = () => {
                           </div>
                           {field.state.meta.errors.length > 0 && (
                             <span className="text-destructive text-sm">
-                              {String(field.state.meta.errors[0])}
+                              {formError(field.state.meta.errors[0])}
                             </span>
                           )}
                         </>

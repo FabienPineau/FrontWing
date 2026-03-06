@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { loginSchema } from "@/schemas/auth";
+import { formError } from "@/lib/utils";
 import { useForm } from "@tanstack/react-form";
 import { IconEye, IconEyeOff, IconLockOpen } from "@tabler/icons-react";
 import React, { useCallback, useState } from "react";
@@ -113,7 +114,7 @@ const LoginPage: React.FC = () => {
                           />
                           {field.state.meta.errors.length > 0 && (
                             <span className="text-destructive text-sm">
-                              {String(field.state.meta.errors[0])}
+                              {formError(field.state.meta.errors[0])}
                             </span>
                           )}
                         </>
@@ -154,7 +155,7 @@ const LoginPage: React.FC = () => {
                           </div>
                           {field.state.meta.errors.length > 0 && (
                             <span className="text-destructive text-sm">
-                              {String(field.state.meta.errors[0])}
+                              {formError(field.state.meta.errors[0])}
                             </span>
                           )}
                         </>

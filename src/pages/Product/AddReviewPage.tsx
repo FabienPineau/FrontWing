@@ -12,6 +12,7 @@ import Layout from "../../layouts/Default";
 import { Product } from "../../types/Product";
 import { useForm } from "@tanstack/react-form";
 import { reviewSchema } from "@/schemas/review";
+import { formError } from "@/lib/utils";
 
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
@@ -164,7 +165,7 @@ const AddReviewPage: React.FC = () => {
                       </div>
                       {field.state.meta.errors.length > 0 && (
                         <p className="text-destructive mt-1 text-sm">
-                          {String(field.state.meta.errors[0])}
+                          {formError(field.state.meta.errors[0])}
                         </p>
                       )}
                     </>
@@ -188,7 +189,7 @@ const AddReviewPage: React.FC = () => {
                       />
                       {field.state.meta.errors.length > 0 && (
                         <p className="text-destructive mt-1 text-sm">
-                          {String(field.state.meta.errors[0])}
+                          {formError(field.state.meta.errors[0])}
                         </p>
                       )}
                     </>
@@ -212,7 +213,7 @@ const AddReviewPage: React.FC = () => {
                       />
                       {field.state.meta.errors.length > 0 && (
                         <p className="text-destructive mt-1 text-sm">
-                          {String(field.state.meta.errors[0])}
+                          {formError(field.state.meta.errors[0])}
                         </p>
                       )}
                     </>
@@ -236,7 +237,7 @@ const AddReviewPage: React.FC = () => {
                       />
                       {field.state.meta.errors.length > 0 && (
                         <p className="text-destructive mt-1 text-sm">
-                          {String(field.state.meta.errors[0])}
+                          {formError(field.state.meta.errors[0])}
                         </p>
                       )}
                     </>

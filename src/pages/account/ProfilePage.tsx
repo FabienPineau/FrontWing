@@ -16,6 +16,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { useForm } from "@tanstack/react-form";
 import { profileSchema } from "@/schemas/account";
+import { formError } from "@/lib/utils";
 
 const labelClass = "block text-sm font-medium mb-1";
 
@@ -117,7 +118,7 @@ const ProfilePage: React.FC = () => {
                         />
                         {field.state.meta.errors.length > 0 && (
                           <p className="text-destructive mt-1 text-sm">
-                            {String(field.state.meta.errors[0])}
+                            {formError(field.state.meta.errors[0])}
                           </p>
                         )}
                       </>
@@ -137,7 +138,7 @@ const ProfilePage: React.FC = () => {
                         />
                         {field.state.meta.errors.length > 0 && (
                           <p className="text-destructive mt-1 text-sm">
-                            {String(field.state.meta.errors[0])}
+                            {formError(field.state.meta.errors[0])}
                           </p>
                         )}
                       </>
@@ -158,7 +159,7 @@ const ProfilePage: React.FC = () => {
                         />
                         {field.state.meta.errors.length > 0 && (
                           <p className="text-destructive mt-1 text-sm">
-                            {String(field.state.meta.errors[0])}
+                            {formError(field.state.meta.errors[0])}
                           </p>
                         )}
                       </>

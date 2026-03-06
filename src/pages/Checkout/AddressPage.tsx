@@ -17,6 +17,7 @@ import { useCustomer } from "../../context/CustomerContext";
 import { useOrder } from "../../context/OrderContext";
 import CheckoutLayout from "../../layouts/Checkout";
 import { addressSchema, AddressValues } from "@/schemas/address";
+import { formError } from "@/lib/utils";
 
 interface Country {
   code: string;
@@ -267,7 +268,7 @@ const AddressPage: React.FC = () => {
                 />
                 {field.state.meta.errors.length > 0 && (
                   <p className="text-destructive mt-1 text-sm">
-                    {String(field.state.meta.errors[0])}
+                    {formError(field.state.meta.errors[0])}
                   </p>
                 )}
               </>
@@ -292,7 +293,7 @@ const AddressPage: React.FC = () => {
                 />
                 {field.state.meta.errors.length > 0 && (
                   <p className="text-destructive mt-1 text-sm">
-                    {String(field.state.meta.errors[0])}
+                    {formError(field.state.meta.errors[0])}
                   </p>
                 )}
               </>
@@ -330,7 +331,7 @@ const AddressPage: React.FC = () => {
               />
               {field.state.meta.errors.length > 0 && (
                 <p className="text-destructive mt-1 text-sm">
-                  {String(field.state.meta.errors[0])}
+                  {formError(field.state.meta.errors[0])}
                 </p>
               )}
             </>
@@ -363,7 +364,7 @@ const AddressPage: React.FC = () => {
               </Select>
               {field.state.meta.errors.length > 0 && (
                 <p className="text-destructive mt-1 text-sm">
-                  {String(field.state.meta.errors[0])}
+                  {formError(field.state.meta.errors[0])}
                 </p>
               )}
             </>
@@ -387,7 +388,7 @@ const AddressPage: React.FC = () => {
               />
               {field.state.meta.errors.length > 0 && (
                 <p className="text-destructive mt-1 text-sm">
-                  {String(field.state.meta.errors[0])}
+                  {formError(field.state.meta.errors[0])}
                 </p>
               )}
             </>
@@ -411,7 +412,7 @@ const AddressPage: React.FC = () => {
               />
               {field.state.meta.errors.length > 0 && (
                 <p className="text-destructive mt-1 text-sm">
-                  {String(field.state.meta.errors[0])}
+                  {formError(field.state.meta.errors[0])}
                 </p>
               )}
             </>
@@ -467,7 +468,7 @@ const AddressPage: React.FC = () => {
                     />
                     {field.state.meta.errors.length > 0 && (
                       <p className="text-destructive mt-1 text-sm">
-                        {String(field.state.meta.errors[0])}
+                        {formError(field.state.meta.errors[0])}
                       </p>
                     )}
                   </>
