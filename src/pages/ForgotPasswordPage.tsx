@@ -64,10 +64,11 @@ const ForgotPasswordPage: React.FC = () => {
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       onBlur={field.handleBlur}
+                      aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
                     />
-                    {field.state.meta.errors.length > 0 && (
+                    {(field.state.meta.errors?.length ?? 0) > 0 && (
                       <span className="text-destructive text-sm">
-                        {formError(field.state.meta.errors[0])}
+                        {formError(field.state.meta.errors?.[0])}
                       </span>
                     )}
                   </>

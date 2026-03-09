@@ -148,6 +148,7 @@ const EditAddressPage: React.FC = () => {
             <Skeleton count={10} height={36} className="mb-2" />
           ) : (
             <form
+              noValidate
               onSubmit={(e) => {
                 e.preventDefault();
                 e.stopPropagation();

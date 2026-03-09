@@ -95,6 +95,7 @@ const AddAddressPage: React.FC = () => {
           </div>
 
           <form
+            noValidate
             onSubmit={(e) => {
               e.preventDefault();
               e.stopPropagation();

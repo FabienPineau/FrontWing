@@ -101,6 +101,7 @@ const ChangePasswordPage: React.FC = () => {
                 <Loader loading={isSubmitting}>
                   <form
                     method="post"
+                    noValidate
                     onSubmit={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -119,11 +120,13 @@ const ChangePasswordPage: React.FC = () => {
                                 value={field.state.value}
                                 onChange={(e) => field.handleChange(e.target.value)}
                                 onBlur={field.handleBlur}
-                                aria-invalid={field.state.meta.errors.length > 0 || undefined}
+                                aria-invalid={
+                                  (field.state.meta.errors?.length ?? 0) > 0 || undefined
+                                }
                               />
-                              {field.state.meta.errors.length > 0 && (
+                              {(field.state.meta.errors?.length ?? 0) > 0 && (
                                 <div className="text-destructive mt-1 text-sm">
-                                  {formError(field.state.meta.errors[0])}
+                                  {formError(field.state.meta.errors?.[0])}
                                 </div>
                               )}
                             </>
@@ -142,11 +145,13 @@ const ChangePasswordPage: React.FC = () => {
                                 value={field.state.value}
                                 onChange={(e) => field.handleChange(e.target.value)}
                                 onBlur={field.handleBlur}
-                                aria-invalid={field.state.meta.errors.length > 0 || undefined}
+                                aria-invalid={
+                                  (field.state.meta.errors?.length ?? 0) > 0 || undefined
+                                }
                               />
-                              {field.state.meta.errors.length > 0 && (
+                              {(field.state.meta.errors?.length ?? 0) > 0 && (
                                 <div className="text-destructive mt-1 text-sm">
-                                  {formError(field.state.meta.errors[0])}
+                                  {formError(field.state.meta.errors?.[0])}
                                 </div>
                               )}
                             </>
@@ -165,11 +170,13 @@ const ChangePasswordPage: React.FC = () => {
                                 value={field.state.value}
                                 onChange={(e) => field.handleChange(e.target.value)}
                                 onBlur={field.handleBlur}
-                                aria-invalid={field.state.meta.errors.length > 0 || undefined}
+                                aria-invalid={
+                                  (field.state.meta.errors?.length ?? 0) > 0 || undefined
+                                }
                               />
-                              {field.state.meta.errors.length > 0 && (
+                              {(field.state.meta.errors?.length ?? 0) > 0 && (
                                 <div className="text-destructive mt-1 text-sm">
-                                  {formError(field.state.meta.errors[0])}
+                                  {formError(field.state.meta.errors?.[0])}
                                 </div>
                               )}
                             </>

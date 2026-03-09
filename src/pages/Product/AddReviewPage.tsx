@@ -131,6 +131,7 @@ const AddReviewPage: React.FC = () => {
           <div className="w-full px-4 md:w-7/12 lg:w-8/12">
             <h1>Add Your Review</h1>
             <form
+              noValidate
               onSubmit={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -163,9 +164,9 @@ const AddReviewPage: React.FC = () => {
                           </Button>
                         ))}
                       </div>
-                      {field.state.meta.errors.length > 0 && (
+                      {(field.state.meta.errors?.length ?? 0) > 0 && (
                         <p className="text-destructive mt-1 text-sm">
-                          {formError(field.state.meta.errors[0])}
+                          {formError(field.state.meta.errors?.[0])}
                         </p>
                       )}
                     </>
@@ -186,10 +187,11 @@ const AddReviewPage: React.FC = () => {
                         onChange={(e) => field.handleChange(e.target.value)}
                         onBlur={field.handleBlur}
                         required
+                        aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
                       />
-                      {field.state.meta.errors.length > 0 && (
+                      {(field.state.meta.errors?.length ?? 0) > 0 && (
                         <p className="text-destructive mt-1 text-sm">
-                          {formError(field.state.meta.errors[0])}
+                          {formError(field.state.meta.errors?.[0])}
                         </p>
                       )}
                     </>
@@ -210,10 +212,11 @@ const AddReviewPage: React.FC = () => {
                         onChange={(e) => field.handleChange(e.target.value)}
                         onBlur={field.handleBlur}
                         required
+                        aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
                       />
-                      {field.state.meta.errors.length > 0 && (
+                      {(field.state.meta.errors?.length ?? 0) > 0 && (
                         <p className="text-destructive mt-1 text-sm">
-                          {formError(field.state.meta.errors[0])}
+                          {formError(field.state.meta.errors?.[0])}
                         </p>
                       )}
                     </>
@@ -234,10 +237,11 @@ const AddReviewPage: React.FC = () => {
                         onChange={(e) => field.handleChange(e.target.value)}
                         onBlur={field.handleBlur}
                         required
+                        aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
                       />
-                      {field.state.meta.errors.length > 0 && (
+                      {(field.state.meta.errors?.length ?? 0) > 0 && (
                         <p className="text-destructive mt-1 text-sm">
-                          {formError(field.state.meta.errors[0])}
+                          {formError(field.state.meta.errors?.[0])}
                         </p>
                       )}
                     </>

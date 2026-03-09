@@ -98,6 +98,7 @@ const ProfilePage: React.FC = () => {
             <Skeleton count={12} height={36} className="mb-2" />
           ) : (
             <form
+              noValidate
               onSubmit={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -115,10 +116,11 @@ const ProfilePage: React.FC = () => {
                           onChange={(e) => field.handleChange(e.target.value)}
                           onBlur={field.handleBlur}
                           required
+                          aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
                         />
-                        {field.state.meta.errors.length > 0 && (
+                        {(field.state.meta.errors?.length ?? 0) > 0 && (
                           <p className="text-destructive mt-1 text-sm">
-                            {formError(field.state.meta.errors[0])}
+                            {formError(field.state.meta.errors?.[0])}
                           </p>
                         )}
                       </>
@@ -135,10 +137,11 @@ const ProfilePage: React.FC = () => {
                           onChange={(e) => field.handleChange(e.target.value)}
                           onBlur={field.handleBlur}
                           required
+                          aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
                         />
-                        {field.state.meta.errors.length > 0 && (
+                        {(field.state.meta.errors?.length ?? 0) > 0 && (
                           <p className="text-destructive mt-1 text-sm">
-                            {formError(field.state.meta.errors[0])}
+                            {formError(field.state.meta.errors?.[0])}
                           </p>
                         )}
                       </>
@@ -156,10 +159,11 @@ const ProfilePage: React.FC = () => {
                           onChange={(e) => field.handleChange(e.target.value)}
                           onBlur={field.handleBlur}
                           required
+                          aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
                         />
-                        {field.state.meta.errors.length > 0 && (
+                        {(field.state.meta.errors?.length ?? 0) > 0 && (
                           <p className="text-destructive mt-1 text-sm">
-                            {formError(field.state.meta.errors[0])}
+                            {formError(field.state.meta.errors?.[0])}
                           </p>
                         )}
                       </>

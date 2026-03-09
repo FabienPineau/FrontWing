@@ -111,10 +111,11 @@ const LoginPage: React.FC = () => {
                             required
                             onChange={(e) => field.handleChange(e.target.value)}
                             onBlur={field.handleBlur}
+                            aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
                           />
-                          {field.state.meta.errors.length > 0 && (
+                          {(field.state.meta.errors?.length ?? 0) > 0 && (
                             <span className="text-destructive text-sm">
-                              {formError(field.state.meta.errors[0])}
+                              {formError(field.state.meta.errors?.[0])}
                             </span>
                           )}
                         </>
@@ -139,6 +140,7 @@ const LoginPage: React.FC = () => {
                               onChange={(e) => field.handleChange(e.target.value)}
                               onBlur={field.handleBlur}
                               className="pr-10"
+                              aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
                             />
                             <button
                               type="button"
@@ -153,9 +155,9 @@ const LoginPage: React.FC = () => {
                               )}
                             </button>
                           </div>
-                          {field.state.meta.errors.length > 0 && (
+                          {(field.state.meta.errors?.length ?? 0) > 0 && (
                             <span className="text-destructive text-sm">
-                              {formError(field.state.meta.errors[0])}
+                              {formError(field.state.meta.errors?.[0])}
                             </span>
                           )}
                         </>

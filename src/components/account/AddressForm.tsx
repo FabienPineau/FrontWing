@@ -58,11 +58,11 @@ const AddressForm: React.FC<AddressFormProps> = ({ form, countries, loadingCount
               onChange={(e) => field.handleChange(e.target.value)}
               onBlur={field.handleBlur}
               required
-              aria-invalid={field.state.meta.errors.length > 0 || undefined}
+              aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
             />
-            {field.state.meta.errors.length > 0 && (
+            {(field.state.meta.errors?.length ?? 0) > 0 && (
               <p className="text-destructive mt-1 text-sm">
-                {formError(field.state.meta.errors[0])}
+                {formError(field.state.meta.errors?.[0])}
               </p>
             )}
           </>
@@ -79,11 +79,11 @@ const AddressForm: React.FC<AddressFormProps> = ({ form, countries, loadingCount
               onChange={(e) => field.handleChange(e.target.value)}
               onBlur={field.handleBlur}
               required
-              aria-invalid={field.state.meta.errors.length > 0 || undefined}
+              aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
             />
-            {field.state.meta.errors.length > 0 && (
+            {(field.state.meta.errors?.length ?? 0) > 0 && (
               <p className="text-destructive mt-1 text-sm">
-                {formError(field.state.meta.errors[0])}
+                {formError(field.state.meta.errors?.[0])}
               </p>
             )}
           </>
@@ -112,11 +112,11 @@ const AddressForm: React.FC<AddressFormProps> = ({ form, countries, loadingCount
               onChange={(e) => field.handleChange(e.target.value)}
               onBlur={field.handleBlur}
               required
-              aria-invalid={field.state.meta.errors.length > 0 || undefined}
+              aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
             />
-            {field.state.meta.errors.length > 0 && (
+            {(field.state.meta.errors?.length ?? 0) > 0 && (
               <p className="text-destructive mt-1 text-sm">
-                {formError(field.state.meta.errors[0])}
+                {formError(field.state.meta.errors?.[0])}
               </p>
             )}
           </>
@@ -147,9 +147,9 @@ const AddressForm: React.FC<AddressFormProps> = ({ form, countries, loadingCount
                   ))}
                 </SelectContent>
               </Select>
-              {field.state.meta.errors.length > 0 && (
+              {(field.state.meta.errors?.length ?? 0) > 0 && (
                 <p className="text-destructive mt-1 text-sm">
-                  {formError(field.state.meta.errors[0])}
+                  {formError(field.state.meta.errors?.[0])}
                 </p>
               )}
             </>
@@ -185,11 +185,11 @@ const AddressForm: React.FC<AddressFormProps> = ({ form, countries, loadingCount
               onChange={(e) => field.handleChange(e.target.value)}
               onBlur={field.handleBlur}
               required
-              aria-invalid={field.state.meta.errors.length > 0 || undefined}
+              aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
             />
-            {field.state.meta.errors.length > 0 && (
+            {(field.state.meta.errors?.length ?? 0) > 0 && (
               <p className="text-destructive mt-1 text-sm">
-                {formError(field.state.meta.errors[0])}
+                {formError(field.state.meta.errors?.[0])}
               </p>
             )}
           </>
@@ -206,11 +206,11 @@ const AddressForm: React.FC<AddressFormProps> = ({ form, countries, loadingCount
               onChange={(e) => field.handleChange(e.target.value)}
               onBlur={field.handleBlur}
               required
-              aria-invalid={field.state.meta.errors.length > 0 || undefined}
+              aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
             />
-            {field.state.meta.errors.length > 0 && (
+            {(field.state.meta.errors?.length ?? 0) > 0 && (
               <p className="text-destructive mt-1 text-sm">
-                {formError(field.state.meta.errors[0])}
+                {formError(field.state.meta.errors?.[0])}
               </p>
             )}
           </>

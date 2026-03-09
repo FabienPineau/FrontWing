@@ -8,16 +8,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useForm } from "@tanstack/react-form";
+import { formError } from "@/lib/utils";
+import { addressSchema, AddressValues } from "@/schemas/address";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import { useForm } from "@tanstack/react-form";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Steps from "../../components/checkout/Steps";
 import { useCustomer } from "../../context/CustomerContext";
 import { useOrder } from "../../context/OrderContext";
 import CheckoutLayout from "../../layouts/Checkout";
-import { addressSchema, AddressValues } from "@/schemas/address";
-import { formError } from "@/lib/utils";
 
 interface Country {
   code: string;
@@ -57,33 +57,31 @@ const AddressPage: React.FC = () => {
     },
     validators: {
       onSubmit: ({ value }) => {
-        const errors: Record<string, string> = {};
+        const fields: Record<string, string> = {};
+
+        if (!customer && !value.email?.trim()) {
+          fields["email"] = "Email is required";
+        }
 
         const billingResult = addressSchema.safeParse(value.billingAddress);
         if (!billingResult.success) {
-          billingResult.error.errors.forEach((err) => {
-            const path = `billingAddress.${err.path.join(".")}`;
-            errors[path] = err.message;
-          });
-        }
-
-        if (!customer && !value.email?.trim()) {
-          errors["email"] = "Required";
-        }
-
-        if (value.useDifferentShipping && value.shippingAddress) {
-          const shippingResult = addressSchema.safeParse(value.shippingAddress);
-          if (!shippingResult.success) {
-            shippingResult.error.errors.forEach((err) => {
-              const path = `shippingAddress.${err.path.join(".")}`;
-              errors[path] = err.message;
-            });
+          for (const issue of billingResult.error.issues) {
+            const key = issue.path[0];
+            if (key) fields[`billingAddress.${key}`] = issue.message;
           }
         }
 
-        if (Object.keys(errors).length > 0) {
-          return { fields: errors };
+        if (value.useDifferentShipping) {
+          const shippingResult = addressSchema.safeParse(value.shippingAddress);
+          if (!shippingResult.success) {
+            for (const issue of shippingResult.error.issues) {
+              const key = issue.path[0];
+              if (key) fields[`shippingAddress.${key}`] = issue.message;
+            }
+          }
         }
+
+        if (Object.keys(fields).length > 0) return { fields };
         return undefined;
       },
     },
@@ -132,13 +130,19 @@ const AddressPage: React.FC = () => {
         const addressData = await addressesRes.json();
         const countryData = await countriesRes.json();
 
-        const addressItems = addressData["hydra:member"] as (AddressValues & { id?: number })[];
-        const countryItems = countryData["hydra:member"] as Country[];
+        const addressItems = (addressData["hydra:member"] ?? []) as (AddressValues & {
+          id?: number;
+        })[];
+        const countryItems = (countryData["hydra:member"] ?? []) as Country[];
 
         setAddresses(addressItems);
         setCountries(countryItems);
 
         if (!isInitialized.current) {
+          // Wait until we have enough context to decide (order loaded or customer loaded or guest)
+          const canInitialize = order !== undefined || customer !== null || !token;
+          if (!canInitialize) return;
+
           if (order?.billingAddress) {
             const ba = order.billingAddress;
             form.setFieldValue("billingAddress", {
@@ -158,9 +162,9 @@ const AddressPage: React.FC = () => {
                 ? customer.defaultAddress.split("/").pop()
                 : customer.defaultAddress?.["@id"]?.split("/").pop();
 
-            const defaultAddress = addressItems.find(
-              (addr) => String(addr.id) === defaultAddressId
-            );
+            const defaultAddress =
+              addressItems.find((addr) => String(addr.id) === defaultAddressId) ?? addressItems[0];
+
             if (defaultAddress) {
               form.setFieldValue("billingAddress", {
                 firstName: defaultAddress.firstName ?? "",
@@ -264,11 +268,11 @@ const AddressPage: React.FC = () => {
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)}
                   onBlur={field.handleBlur}
-                  aria-invalid={field.state.meta.errors.length > 0 || undefined}
+                  aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
                 />
-                {field.state.meta.errors.length > 0 && (
+                {(field.state.meta.errors?.length ?? 0) > 0 && (
                   <p className="text-destructive mt-1 text-sm">
-                    {formError(field.state.meta.errors[0])}
+                    {formError(field.state.meta.errors?.[0])}
                   </p>
                 )}
               </>
@@ -289,11 +293,11 @@ const AddressPage: React.FC = () => {
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)}
                   onBlur={field.handleBlur}
-                  aria-invalid={field.state.meta.errors.length > 0 || undefined}
+                  aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
                 />
-                {field.state.meta.errors.length > 0 && (
+                {(field.state.meta.errors?.length ?? 0) > 0 && (
                   <p className="text-destructive mt-1 text-sm">
-                    {formError(field.state.meta.errors[0])}
+                    {formError(field.state.meta.errors?.[0])}
                   </p>
                 )}
               </>
@@ -327,11 +331,11 @@ const AddressPage: React.FC = () => {
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 onBlur={field.handleBlur}
-                aria-invalid={field.state.meta.errors.length > 0 || undefined}
+                aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
               />
-              {field.state.meta.errors.length > 0 && (
+              {(field.state.meta.errors?.length ?? 0) > 0 && (
                 <p className="text-destructive mt-1 text-sm">
-                  {formError(field.state.meta.errors[0])}
+                  {formError(field.state.meta.errors?.[0])}
                 </p>
               )}
             </>
@@ -351,7 +355,9 @@ const AddressPage: React.FC = () => {
                 onValueChange={(val) => field.handleChange(val ?? "")}
                 required
               >
-                <SelectTrigger>
+                <SelectTrigger
+                  aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
+                >
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent>
@@ -362,9 +368,9 @@ const AddressPage: React.FC = () => {
                   ))}
                 </SelectContent>
               </Select>
-              {field.state.meta.errors.length > 0 && (
+              {(field.state.meta.errors?.length ?? 0) > 0 && (
                 <p className="text-destructive mt-1 text-sm">
-                  {formError(field.state.meta.errors[0])}
+                  {formError(field.state.meta.errors?.[0])}
                 </p>
               )}
             </>
@@ -384,11 +390,11 @@ const AddressPage: React.FC = () => {
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 onBlur={field.handleBlur}
-                aria-invalid={field.state.meta.errors.length > 0 || undefined}
+                aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
               />
-              {field.state.meta.errors.length > 0 && (
+              {(field.state.meta.errors?.length ?? 0) > 0 && (
                 <p className="text-destructive mt-1 text-sm">
-                  {formError(field.state.meta.errors[0])}
+                  {formError(field.state.meta.errors?.[0])}
                 </p>
               )}
             </>
@@ -408,11 +414,11 @@ const AddressPage: React.FC = () => {
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 onBlur={field.handleBlur}
-                aria-invalid={field.state.meta.errors.length > 0 || undefined}
+                aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
               />
-              {field.state.meta.errors.length > 0 && (
+              {(field.state.meta.errors?.length ?? 0) > 0 && (
                 <p className="text-destructive mt-1 text-sm">
-                  {formError(field.state.meta.errors[0])}
+                  {formError(field.state.meta.errors?.[0])}
                 </p>
               )}
             </>
@@ -440,6 +446,7 @@ const AddressPage: React.FC = () => {
       <div className="flex-1 pt-4 pb-5 lg:pr-20">
         <Steps activeStep="address" />
         <form
+          noValidate
           onSubmit={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -464,11 +471,11 @@ const AddressPage: React.FC = () => {
                       value={field.state.value ?? ""}
                       onChange={(e) => field.handleChange(e.target.value)}
                       onBlur={field.handleBlur}
-                      aria-invalid={field.state.meta.errors.length > 0 || undefined}
+                      aria-invalid={(field.state.meta.errors?.length ?? 0) > 0 || undefined}
                     />
-                    {field.state.meta.errors.length > 0 && (
+                    {(field.state.meta.errors?.length ?? 0) > 0 && (
                       <p className="text-destructive mt-1 text-sm">
-                        {formError(field.state.meta.errors[0])}
+                        {formError(field.state.meta.errors?.[0])}
                       </p>
                     )}
                   </>
@@ -521,7 +528,7 @@ const AddressPage: React.FC = () => {
           <form.Subscribe selector={(state) => state.isSubmitting}>
             {(isSubmitting) => (
               <div className="flex flex-col justify-between gap-2 sm:flex-row">
-                <Button variant="outline" render={<Link to="/" />}>
+                <Button variant="outline" nativeButton={false} render={<Link to="/" />}>
                   <IconChevronLeft stroke={2} />
                   Back to store
                 </Button>
